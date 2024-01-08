@@ -1,13 +1,12 @@
-import { useEffect } from 'react';
 import './global.scss';
-import getData from './useGetData';
+import Post from './Post';
 
 function App() {
-	useEffect(() => {
-		getData();
-	}, []);
-
-	return <div className='App'></div>;
+	return (
+		<div className='App'>
+			<Post />
+		</div>
+	);
 }
 
 export default App;

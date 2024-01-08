@@ -1,6 +1,18 @@
-const getData = async () => {
-	const promise = await fetch('https://jsonplaceholder.typicode.com/posts');
+import { useEffect } from 'react';
+
+const checkPromiseStatus = (promise) => {
 	console.log(promise);
 };
 
-export default getData;
+const useGetData = (url) => {
+	useEffect(() => {
+		const getData = (url) => {
+			const promise = fetch(url).then((data) => data.json());
+			checkPromiseStatus(promise);
+		};
+
+		getData();
+	}, []);
+};
+
+export default useGetData;
