@@ -1,47 +1,38 @@
 import { useState } from 'react';
-import News from './components/news/News';
-import Pics from './components/pics/Pics';
-import Visual from './components/visual/Visual';
 import './global.scss';
-import { flushSync } from 'react-dom';
 
 function App() {
-	console.log('re-render');
-	const [Count1, setCount1] = useState(1);
-	const [Count2, setCount2] = useState(2);
-	const [Count3, setCount3] = useState(3);
+	const [Count, setCount] = useState(0);
+	const [Items, setItems] = useState([]);
 
-	const returnPromise = () => {
-		return new Promise((res) => setTimeout(res, 500));
-	};
+	const handleClick = () => {
+		setCount(Count + 1);
 
-	const changeState = () => {
-		returnPromise().then(() => {
-			// flushSync : 특정 state값을 Auto Batching에서 제외 처리
-			flushSync(() => {
-				setCount1(Count1 + 1);
-			});
-			setCount2(Count2 + 1);
-			setCount3(Count3 + 1);
-		});
+		const arr = Array(20000)
+			.fill(1)
+			.map((_, idx) => Count + idx);
+
+		setItems(arr);
 	};
 
 	return (
 		<div className='App'>
-			<button onClick={changeState}>변경</button>
-			<h1>
-				{Count1}-{Count2}-{Count3}
-			</h1>
-			<Visual />
-			<News />
-			<Pics />
+			<button onClick={handleClick}>{Count}</button>
+			<ul>
+				{Items.map((num) => (
+					<li key={num}>{num}</li>
+				))}
+			</ul>
 		</div>
 	);
 }
+
 export default App;
 
 /*
-  [ Automatic Batching ]
-  : 여러 개의 state 가 하나의 핸들러 함수 안에서 동시에 변경이 될 때, 그룹으로 묶어서 한 번만 렌더링 처리가 되도록 하는 것. 
-    * ( 리액트 17에서도 Batching 기능이 동작되긴 하나, 만약 Promise를 반환하는 핸들러 함수 안쪽에서 여러 개의 state가 변경이 되면 동작이 되지 않았음. )
+	useTransition
+	: 컴포넌트 렌더링 시, 연산에 우선순위를 두어서, 늦게 렌더링해도 될 것들을 선별하여 지정. 
+
+		* ( 기존 17버전에서는, 한 번 렌더링 연산이 시작되면, 중간에 멈추는 것이 불가능했음. )
+			: 특정 핸들러 함수에 의해서 화면을 재연산해야 하는 경우, 중간에 무거운 로직이 실행되는 연산이 있다면, 굳이 무거운 연산이 필요없는 컴포넌트까지 같이 지연이 일어나게 되면서 전반적인 로딩 속도에 악영향을 끼쳤음.
 */
