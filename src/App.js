@@ -1,6 +1,12 @@
+import { useEffect } from 'react';
 import './global.scss';
+import getData from './useGetData';
 
 function App() {
+	useEffect(() => {
+		getData();
+	}, []);
+
 	return <div className='App'></div>;
 }
 
@@ -26,5 +32,9 @@ export default App;
 	- useTransition 은, 컴포넌트 간의 동기화 처리가 아닌, 동시에 실행되는 비동기 방식임. startTransition으로 묶어놓은 연산이 우선 순위가 밀리는 것뿐임. 
 
 	- Suspense 는, 해당 컴포넌트에서 관리하는 promise 데이터의 상태값을 실시간으로 감시하면서, pending이 끝날 때 동기적으로 컴포넌트를 호출함. 
+
+
+	[ Suspense 를 사용하기 위한 조건 ]
+	: Suspense 로 동기화시키는 컴포넌트 내부에, Promise 객체의 상태변화를 추적할 수 있는 로직이 구현되어 있어야 함. (fulfilled, rejected 등을 체크할 수 있는..)
 
 	*/
